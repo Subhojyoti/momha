@@ -10,29 +10,34 @@
 <meta property="og:image" content="assets/fig_overview.webp">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="wrap">
+<body id="top">
 
-<header>
-  <div class="venue">NeurIPS 2026</div>
-  <h1>MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens</h1>
-  <div class="authors">
-    <a href="https://subhojyoti.github.io/">Subhojyoti Mukherjee</a> &nbsp;&middot;&nbsp; Md Mehrab Tanjim
-  </div>
-  <div class="affil">Adobe Research</div>
-  <div class="links">
-    <a class="btn" href="https://arxiv.org/abs/2609.30967">arXiv</a>
-    <a class="btn" href="https://arxiv.org/pdf/2609.30967">PDF</a>
-    <a class="btn off" title="Coming soon">Code (coming soon)</a>
-    <a class="btn off" title="Coming soon">Dataset (coming soon)</a>
+<header class="hero">
+  <div class="wrap">
+    <div class="venue">NeurIPS 2026</div>
+    <h1>MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens</h1>
+    <div class="authors">
+      <a href="https://subhojyoti.github.io/">Subhojyoti Mukherjee</a><sup>1</sup>
+      <span>Md Mehrab Tanjim</span><sup>1</sup>
+    </div>
+    <div class="affil"><sup>1</sup>Adobe Research</div>
+    <div class="links">
+      <a class="btn" href="https://arxiv.org/abs/2609.30967">Paper</a>
+      <a class="btn" href="https://arxiv.org/pdf/2609.30967">PDF</a>
+      <a class="btn off" title="Coming soon">Code (soon)</a>
+      <a class="btn off" title="Coming soon">Dataset (soon)</a>
+    </div>
+    <p class="tagline">We treat the harness, the Python code around the model, as a first-class design surface and optimize it jointly for accuracy, safety, and token cost.</p>
+    <div class="stats">
+      <div class="stat"><b class="count" data-to="17">0</b><span>domains</span></div>
+      <div class="stat"><b class="count" data-to="12">0</b><span>target models</span></div>
+      <div class="stat"><b class="count" data-to="10">0</b><span>baselines compared</span></div>
+      <div class="stat"><b class="count" data-to="0.781" data-dec="3">0</b><span>U-SafeBench safety, highest</span></div>
+    </div>
   </div>
 </header>
 
-<section>
-  <figure>
-    <img src="assets/fig_overview.webp" alt="Overview of the MoMHa harness search">
-  </figure>
-</section>
+<main class="wrap">
 
 <section>
   <h2>Abstract</h2>
@@ -45,42 +50,56 @@
     safety, and token cost) solved by an agentic proposer (Claude Code) with full filesystem access to prior harness
     source, execution traces, and scoring artifacts. Our central finding is that a single-phase joint-reward proposer
     (<strong>MoMHa</strong>) outperforms every alternative, including a two-phase "accuracy then tokens" ablation,
-    scalar-only feedback, and an accuracy-only baseline.
+    scalar-only feedback, and an accuracy-only baseline. We evaluate on seventeen domains and a 12-model fleet spanning
+    four families. MoMHa attains the highest measured behavioural safety composite (U-SafeBench, 0.781) and uses
+    95 fewer tokens per example than the two-phase alternative.
   </div>
 </section>
 
 <section>
-  <h2>Key results</h2>
-  <div class="stats">
-    <div class="stat"><b>17</b><span>domains: 7 synthetic, 7 real-world, 3 safety</span></div>
-    <div class="stat"><b>12</b><span>target models across four families</span></div>
-    <div class="stat"><b>0.482</b><span>synthetic joint mean vs. 0.198&ndash;0.422 for ten baselines</span></div>
-    <div class="stat"><b>0.461</b><span>real-world joint mean vs. 0.377 (DSPy)</span></div>
-    <div class="stat"><b>0.781</b><span>highest U-SafeBench behavioural safety composite</span></div>
-    <div class="stat"><b>8 / 12</b><span>target models where harnesses transfer without retraining</span></div>
+  <h2>Key Contributions</h2>
+  <div class="cards">
+    <div class="card"><div class="num">01</div><h3>Harness search as multi-objective optimization</h3>
+      <p>Harness design becomes search over per-domain accuracy, safety, and token cost, solved with a scalarized joint reward and an agentic proposer that reads traces and edits source.</p></div>
+    <div class="card"><div class="num">02</div><h3>Joint reward beats staged optimization</h3>
+      <p>A single-phase joint reward beats a two-phase accuracy-then-tokens proposer by +2.7 overall points at 95 fewer tokens per example, and leads all 15 variants on 3D hypervolume (0.481).</p></div>
+    <div class="card"><div class="num">03</div><h3>Traces and safety skills matter</h3>
+      <p>Scalar-only feedback lowers safety from 0.781 to 0.754. Removing the safety skill drops it to 0.716. All ten external baselines stay below 0.75.</p></div>
   </div>
+</section>
+
+<section>
+  <h2>How It Works</h2>
+  <p class="hint">Click a stage to read what it does.</p>
+  <div class="steps" id="steps"></div>
+  <p class="stage-text" id="stage-text"></p>
+  <figure>
+    <img src="assets/fig_overview.webp" alt="Overview of the MoMHa harness search">
+  </figure>
+</section>
+
+<section>
+  <h2>Main Results</h2>
+  <p class="hint">Switch the track, and click a column header to sort.</p>
+  <div class="tabs">
+    <button class="tab active" data-mode="synthetic">Synthetic (10 domains)</button>
+    <button class="tab" data-mode="real">Real-world (7 benchmarks)</button>
+    <button class="tab" data-mode="cross">Cross-model (12 models)</button>
+  </div>
+  <h3 id="tbl-title"></h3>
+  <div class="table-scroll"><table id="results-table"></table></div>
+  <p class="note" id="tbl-note"></p>
   <p>
-    MoMHa wins 7 of 10 per-domain columns on the synthetic track and 5 of 7 on the real-world track
-    (HumanEval, MBPP, Spider, FEVER, MMLU-Pro, LawBench, NuminaMath), and uses 95 fewer tokens per example
-    than the two-phase alternative.
+    MoMHa reaches a synthetic joint mean of 0.482 against 0.198&ndash;0.422 for ten baselines, a real-world mean of
+    0.461 against 0.377 for the strongest baseline (DSPy), and the best cross-model mean (0.434, best on 8 of 12 targets).
   </p>
 </section>
 
 <section>
-  <h2>Method</h2>
-  <p>
-    An agentic proposer (Claude Code) rewrites whole Python harnesses with full filesystem access to earlier
-    harness source, execution traces, and scores. Candidates are scored on a single joint reward over accuracy,
-    behavioural safety, and token cost. Every candidate passes a three-layer safety stack before it is evaluated:
-    an AST guard, a mock validator, and a resource-limited sandbox.
-  </p>
-</section>
-
-<section>
-  <h2>Results</h2>
+  <h2>Pareto Analysis</h2>
   <figure>
     <img src="assets/fig_spider_global.webp" alt="Global multi-objective comparison against baselines" loading="lazy">
-    <figcaption>Multi-objective comparison of MoMHa against ten baselines across accuracy, safety, and token cost.</figcaption>
+    <figcaption>Multi-objective comparison against ten baselines across accuracy, safety, and token cost.</figcaption>
   </figure>
   <figure>
     <img src="assets/fig_pareto3d.webp" alt="Pareto surface over accuracy, safety, and tokens" loading="lazy">
@@ -88,17 +107,17 @@
   </figure>
   <figure>
     <img src="assets/fig_spider_composite.webp" alt="Composite per-domain comparison" loading="lazy">
-    <figcaption>Per-domain composite comparison.</figcaption>
+    <figcaption>Per-domain composite comparison across all 17 axes.</figcaption>
   </figure>
   <figure>
     <img src="assets/fig_hypervolume.webp" alt="Hypervolume versus baselines" loading="lazy">
-    <figcaption>Hypervolume of the achieved accuracy, safety, and token trade-offs versus baselines.</figcaption>
+    <figcaption>3D hypervolume of accuracy, safety, and token trade-offs versus baselines.</figcaption>
   </figure>
 </section>
 
 <section>
-  <h2>BibTeX</h2>
-<pre>@inproceedings{mukherjee2026momha,
+  <h2>BibTeX <button id="copy-bib" class="copy">Copy</button></h2>
+<pre id="bib">@inproceedings{mukherjee2026momha,
   title     = {MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens},
   author    = {Mukherjee, Subhojyoti and Tanjim, Md Mehrab},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
@@ -107,11 +126,12 @@
 }</pre>
 </section>
 
+</main>
+
 <footer>
-  Website content licensed under
-  <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.
+  Content licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.
 </footer>
 
-</div>
+<script src="script.js"></script>
 </body>
 </html>
