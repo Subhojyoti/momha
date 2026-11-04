@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens</title>
+<meta name="description" content="MoMHa searches over LLM harness code with a single-phase joint reward over accuracy, safety, and token cost. NeurIPS 2026.">
+<meta property="og:title" content="MoMHa: Multi-Objective Optimization of LLM Harnesses">
+<meta property="og:description" content="Joint optimization of accuracy, safety, and tokens for LLM harnesses. NeurIPS 2026.">
+<meta property="og:image" content="assets/fig_overview.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="venue">NeurIPS 2026</div>
+  <h1>MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens</h1>
+  <div class="authors">
+    <a href="https://subhojyoti.github.io/">Subhojyoti Mukherjee</a> &nbsp;&middot;&nbsp; Md Mehrab Tanjim
+  </div>
+  <div class="affil">Adobe Research</div>
+  <div class="links">
+    <a class="btn" href="https://arxiv.org/abs/2609.30967">arXiv</a>
+    <a class="btn" href="https://arxiv.org/pdf/2609.30967">PDF</a>
+    <a class="btn off" title="Coming soon">Code (coming soon)</a>
+    <a class="btn off" title="Coming soon">Dataset (coming soon)</a>
+  </div>
+</header>
+
+<section>
+  <figure>
+    <img src="assets/fig_overview.webp" alt="Overview of the MoMHa harness search">
+  </figure>
+</section>
+
+<section>
+  <h2>Abstract</h2>
+  <div class="abstract">
+    Most work on improving large language models treats accuracy as the sole objective. We argue that the
+    <em>harness</em>, the Python code surrounding the model that constructs prompts, routes calls, and parses outputs,
+    is a first-class design surface whose quality is inherently <em>multi-objective</em>: an accurate harness that
+    refuses no unsafe request, or that consumes an order of magnitude more tokens, is not a good harness. We present
+    Meta-Harness, a system that casts harness design as search over three per-domain objectives (accuracy, behavioural
+    safety, and token cost) solved by an agentic proposer (Claude Code) with full filesystem access to prior harness
+    source, execution traces, and scoring artifacts. Our central finding is that a single-phase joint-reward proposer
+    (<strong>MoMHa</strong>) outperforms every alternative, including a two-phase "accuracy then tokens" ablation,
+    scalar-only feedback, and an accuracy-only baseline.
+  </div>
+</section>
+
+<section>
+  <h2>Key results</h2>
+  <div class="stats">
+    <div class="stat"><b>17</b><span>domains: 7 synthetic, 7 real-world, 3 safety</span></div>
+    <div class="stat"><b>12</b><span>target models across four families</span></div>
+    <div class="stat"><b>0.482</b><span>synthetic joint mean vs. 0.198&ndash;0.422 for ten baselines</span></div>
+    <div class="stat"><b>0.461</b><span>real-world joint mean vs. 0.377 (DSPy)</span></div>
+    <div class="stat"><b>0.781</b><span>highest U-SafeBench behavioural safety composite</span></div>
+    <div class="stat"><b>8 / 12</b><span>target models where harnesses transfer without retraining</span></div>
+  </div>
+  <p>
+    MoMHa wins 7 of 10 per-domain columns on the synthetic track and 5 of 7 on the real-world track
+    (HumanEval, MBPP, Spider, FEVER, MMLU-Pro, LawBench, NuminaMath), and uses 95 fewer tokens per example
+    than the two-phase alternative.
+  </p>
+</section>
+
+<section>
+  <h2>Method</h2>
+  <p>
+    An agentic proposer (Claude Code) rewrites whole Python harnesses with full filesystem access to earlier
+    harness source, execution traces, and scores. Candidates are scored on a single joint reward over accuracy,
+    behavioural safety, and token cost. Every candidate passes a three-layer safety stack before it is evaluated:
+    an AST guard, a mock validator, and a resource-limited sandbox.
+  </p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <figure>
+    <img src="assets/fig_spider_global.webp" alt="Global multi-objective comparison against baselines" loading="lazy">
+    <figcaption>Multi-objective comparison of MoMHa against ten baselines across accuracy, safety, and token cost.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/fig_pareto3d.webp" alt="Pareto surface over accuracy, safety, and tokens" loading="lazy">
+    <figcaption>Pareto surface over accuracy, safety, and token cost.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/fig_spider_composite.webp" alt="Composite per-domain comparison" loading="lazy">
+    <figcaption>Per-domain composite comparison.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/fig_hypervolume.webp" alt="Hypervolume versus baselines" loading="lazy">
+    <figcaption>Hypervolume of the achieved accuracy, safety, and token trade-offs versus baselines.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>BibTeX</h2>
+<pre>@inproceedings{mukherjee2026momha,
+  title     = {MoMHa: Multi-Objective Optimization of LLM Harnesses over Accuracy, Safety, and Tokens},
+  author    = {Mukherjee, Subhojyoti and Tanjim, Md Mehrab},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2026},
+  note      = {arXiv:2609.30967}
+}</pre>
+</section>
+
+<footer>
+  Website content licensed under
+  <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.
+</footer>
+
+</div>
+</body>
+</html>
